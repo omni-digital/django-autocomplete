@@ -74,6 +74,9 @@ def search(request):
         model_name = request.GET.get('model_name', None)
         model = models.get_model(app_label, model_name)
 
+    if not model:
+        return HttpResponseNotFound()
+
     if AUTOCOMPLETE_MODELS == True:
         allowed_fields = True
     else:
@@ -83,8 +86,8 @@ def search(request):
             try :
                 allowed_fields = AUTOCOMPLETE_MODELS['%s.%s' % (model._meta.app_label, capfirst(model._meta.module_name))]
             except KeyError:
-                warnings.warn("""The model %s.%s is not in you list of allowed AUTOCOMPLETE_MODELS""" % (model._meta.app_label, model._meta.module_name))
-                return HttpResponseNotFound()
+                raise ImproperlyConfigured("""The model %s.%s being autocompleted is not in you list of allowed AUTOCOMPLETE_MODELS.""" % \
+                                           (model._meta.app_label, model._meta.module_name))
 
 
     search_fields = request.GET.get('sf', None)
@@ -95,7 +98,8 @@ def search(request):
             search_fields = allowed_fields
         else:
             # Nothing to search
-            return HttpResponseNotFound()
+            raise ImproperlyConfigured("""The model %s.%s is being autocompleted but no list of search fields was specified.""" % \
+                                       (model._meta.app_label, model._meta.module_name))
     else:
         search_fields = search_fields.split(',')
         if isinstance(allowed_fields, (list, tuple)) or getattr(allowed_fields, '__iter__', False):
@@ -104,7 +108,7 @@ def search(request):
 
     query = request.GET.get('q', None)
 
-    if model and search_fields and query:
+    if search_fields and query:
         qs = model._default_manager.all()
         for bit in query.split():
             or_queries = [models.Q(**{construct_search(smart_str(field_name)): smart_str(bit)})
