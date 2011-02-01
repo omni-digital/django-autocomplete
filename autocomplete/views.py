@@ -106,7 +106,7 @@ def search(request):
             # Limit to search fields
             search_fields = filter(lambda f: get_field_lookup_pair(f)[0] in allowed_fields, search_fields)
 
-    query = request.GET.get('q', None)
+    query = request.GET.get('term', None)
 
     if search_fields and query:
         qs = model._default_manager.all()

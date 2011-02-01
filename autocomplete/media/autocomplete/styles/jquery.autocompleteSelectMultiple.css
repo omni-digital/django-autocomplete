@@ -1,0 +1,74 @@
+
+/* autocomplete */
+
+.autocompleteSelectMultiple,
+.autocompleteSelectMultiple ul,
+.autocompleteSelectMultiple ul li,
+.autocompleteSelectMultiple ul li span.selected,
+.autocompleteSelectMultiple ul li input.keyword {
+    float: left;
+}
+
+.autocompleteSelectMultiple,
+.autocompleteSelectMultiple ul {
+    overflow: hidden;
+}
+
+.autocompleteSelectMultiple {
+    border: 1px solid #bbb;
+    background: #fff;
+    margin: 0;
+    padding: 3px 3px 0 3px; /* leaving bottom space to the margin of the input and selected */
+}
+
+.autocompleteSelectMultiple ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    height: 100%;
+    width: 100%;
+}
+
+.autocompleteSelectMultiple ul li {
+    margin: 0 3px 3px 0;
+}
+
+.autocompleteSelectMultiple ul li span.selected {
+    background: #dee7f8;
+    border: 1px solid #cad8f3;
+    border-radius: 5px;
+    padding: 2px 1px 3px 2px;
+    font-size: 10px;
+    height: 12px;
+    color: #000;
+    line-height: 10px;
+}
+
+.autocompleteSelectMultiple ul li span.selected a.delete {
+    display: inline-block;
+    background: transparent url(../images/autocomplete_close.png) no-repeat 0 0;
+    width: 7px;
+    height: 7px;
+    margin: 2px 2px 1px 5px;
+    padding: 0;
+    text-indent: -9999em;
+    overflow: hidden;
+}
+
+.autocompleteSelectMultiple ul li input.ui-autocomplete-input {
+    border: 0 none;
+    margin: 0 0 3px;
+    background: #fff;
+    padding: 3px 0;
+    font-size: 10px;
+    height: 12px;
+    color: #000;
+    width: 70px;
+}
+
+/* ie6 fixes */
+/* http://css-tricks.com/how-to-create-an-ie-only-stylesheet/ */
+.autocompleteSelectMultiple,
+.autocompleteSelectMultiple ul li {
+    display/**/: inline;
+}
