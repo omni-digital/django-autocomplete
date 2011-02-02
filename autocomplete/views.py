@@ -1,29 +1,17 @@
 import operator
-import warnings
 from django.db import models
 from django.http import HttpResponse, HttpResponseNotFound
 from django.db.models.query import QuerySet
-from django.conf import settings
 from django.utils.encoding import smart_str
 from django.contrib.contenttypes.models import ContentType
 from django.utils import simplejson
 from django.core.exceptions import ImproperlyConfigured
-from django.template.defaultfilters import capfirst
 
 
-AUTOCOMPLETE_MODELS = getattr(settings, 'AUTOCOMPLETE_MODELS', None)
-
-if AUTOCOMPLETE_MODELS is None:
-    raise ImproperlyConfigured("""Set the AUTOCOMPLETE_MODELS setting to control which models can be searched.""")
+from autocomplete import get_searchable_fields
 
 """
-#Allow autocomplete to search any models
-AUTOCOMPLETE_MODELS = True
-#Limit the models autocomplete will search but do not limit the fields that can be searched. 
-AUTOCOMPLETE_MODELS = {
-   'profiles.Profile': True,
-}
-#Limit the models autocomplete will search. 
+# Set the models autocomplete will search. 
 AUTOCOMPLETE_MODELS = {
    'profiles.Profile': ['email', 'first_name', 'last_name',],
 }
@@ -77,34 +65,21 @@ def search(request):
     if not model:
         return HttpResponseNotFound()
 
-    if AUTOCOMPLETE_MODELS == True:
-        allowed_fields = True
-    else:
-        try :
-            allowed_fields = AUTOCOMPLETE_MODELS['%s.%s' % (model._meta.app_label, model._meta.module_name)]
-        except KeyError:
-            try :
-                allowed_fields = AUTOCOMPLETE_MODELS['%s.%s' % (model._meta.app_label, capfirst(model._meta.module_name))]
-            except KeyError:
-                raise ImproperlyConfigured("""The model %s.%s being autocompleted is not in you list of allowed AUTOCOMPLETE_MODELS.""" % \
-                                           (model._meta.app_label, model._meta.module_name))
-
+    allowed_fields = get_searchable_fields(model)
+    if not allowed_fields:
+        raise ImproperlyConfigured('The model %s.%s being autocompleted it does not have allowed fields. '
+                                   'If you are using the autocomplete search whithout an autocomplete widget then add the '
+                                   'app_label.model and searchable fields to the AUTOCOMPLETE_MODELS dictionary in your setting.' % \
+                                   (model._meta.app_label, model._meta.module_name))
 
     search_fields = request.GET.get('sf', None)
 
     if search_fields is None:
-        if isinstance(allowed_fields, (list, tuple)):
-            # No search_fields use the allowed_fields list
-            search_fields = allowed_fields
-        else:
-            # Nothing to search
-            raise ImproperlyConfigured("""The model %s.%s is being autocompleted but no list of search fields was specified.""" % \
-                                       (model._meta.app_label, model._meta.module_name))
+        search_fields = allowed_fields
     else:
+        # Limit to search fields
         search_fields = search_fields.split(',')
-        if isinstance(allowed_fields, (list, tuple)) or getattr(allowed_fields, '__iter__', False):
-            # Limit to search fields
-            search_fields = filter(lambda f: get_field_lookup_pair(f)[0] in allowed_fields, search_fields)
+        search_fields = filter(lambda f: get_field_lookup_pair(f)[0] in map(lambda f: get_field_lookup_pair(f)[0], allowed_fields), search_fields)
 
     query = request.GET.get('term', None)
 
@@ -119,6 +94,7 @@ def search(request):
             qs = qs & other_qs
 
         data = [{'label': o.__unicode__(), 'value': o.pk} for o in qs]
+
         return HttpResponse(simplejson.dumps(data), mimetype='application/javascript')
 
     return HttpResponseNotFound()
