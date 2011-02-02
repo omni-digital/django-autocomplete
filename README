@@ -11,20 +11,22 @@ Add autocomplete to you INSTALLED_APPS.
 Add the autocomplete.urls to your urls.
 e.g.
 
-urlpatterns += patterns(
-    (r'^autocomplete/', include('autocomplete.urls')),
-)
+    urlpatterns += patterns(
+        (r'^autocomplete/', include('autocomplete.urls')),
+    )
 
 
-# Use the autocomplete widgets in your forms
-from autocomplete.widgets import AutocompleteSelectMultiple
+Use the autocomplete widgets in your forms
 
-class Topping(models.Model):
-    name = forms.CharField(max_length=250, required=True)
 
-class Pizza(models.Model):
-    toppings = models.ManyToManyField(Topping)
+    from autocomplete.widgets import AutocompleteSelectMultiple
 
-class PizzaForm(forms.ModelForm):
-    toppings = forms.ModelMultipleChoiceField(Topping, widget=AutocompleteSelectMultiple(Topping, search_fields=['name']), )
+    class Topping(models.Model):
+        name = forms.CharField(max_length=250, required=True)
+
+    class Pizza(models.Model):
+        toppings = models.ManyToManyField(Topping)
+
+    class PizzaForm(forms.ModelForm):
+        toppings = forms.ModelMultipleChoiceField(Topping, widget=AutocompleteSelectMultiple(Topping, search_fields=['name']), )
 
