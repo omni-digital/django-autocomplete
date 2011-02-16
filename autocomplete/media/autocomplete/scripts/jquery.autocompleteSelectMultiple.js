@@ -21,7 +21,7 @@ This is to be used with the Incuna AutocompleteSelectMultiple Django widget.
                 'href': '#',
                 'text': 'Delete',
                 'click': function () {
-                    $('.autocompleteSelectMultiple').prev('select.autocompleteselectmultiple').find('option[value='+pk+']').remove();
+                    $('.autocompleteSelectMultiple').siblings('select.autocompleteselectmultiple').find('option[value='+pk+']').remove();
 
                     $(this).closest('li').fadeOut(300, function () {
                         $(this).remove();
@@ -50,7 +50,7 @@ This is to be used with the Incuna AutocompleteSelectMultiple Django widget.
         }
 
         // hide the select box from showing
-        $('.autocompleteSelectMultiple').prev('select.autocompleteselectmultiple').hide();
+        $('.autocompleteSelectMultiple').siblings('select.autocompleteselectmultiple').hide();
 
         // setup click so anywhere in the box is clicked, it will focus the text input
         $('.autocompleteSelectMultiple').click(function () {
@@ -58,7 +58,7 @@ This is to be used with the Incuna AutocompleteSelectMultiple Django widget.
         });
 
         // if there is currently data, show them...
-        $('.autocompleteSelectMultiple').prev('select.autocompleteselectmultiple').find('option').each(function() {
+        $('.autocompleteSelectMultiple').siblings('select.autocompleteselectmultiple:first').find('option').each(function() {
             addDataElement($(this).val(), $(this).text());
         });
 
