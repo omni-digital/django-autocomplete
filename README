@@ -15,18 +15,18 @@ e.g.
         (r'^autocomplete/', include('autocomplete.urls')),
     )
 
-
 Use the autocomplete widgets in your forms
-
 
     from autocomplete.widgets import AutocompleteSelectMultiple
 
     class Topping(models.Model):
         name = forms.CharField(max_length=250, required=True)
 
-    class Pizza(models.Model):
-        toppings = models.ManyToManyField(Topping)
-
     class PizzaForm(forms.ModelForm):
         toppings = forms.ModelMultipleChoiceField(Topping, widget=AutocompleteSelectMultiple(Topping, search_fields=['name']), )
 
+To get it working in the templates, you need to include the media, for example:
+
+    {% block extra_head %}
+        {{ form.media }}
+    {% endblock %}
