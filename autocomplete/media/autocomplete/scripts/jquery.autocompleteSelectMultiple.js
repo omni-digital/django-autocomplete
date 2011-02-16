@@ -14,12 +14,52 @@ This is to be used with the Incuna AutocompleteSelectMultiple Django widget.
             return split( term ).pop();
         }
 
+        function addDataElement(pk, title) {
+
+            var deleteButton = $('<a></a>', {
+                'class': 'delete',
+                'href': '#',
+                'text': 'Delete',
+                'click': function () {
+                    $('.autocompleteSelectMultiple').prev('select.autocompleteselectmultiple').find('option[value='+pk+']').remove();
+
+                    $(this).closest('li').fadeOut(300, function () {
+                        $(this).remove();
+                        $('.autocompleteSelectMultiple').find("input.search_input" ).focus();
+                    });
+
+                    return false;
+                }
+            });
+
+            var dataLi = $('<li></li>', {
+                'id': 'id_ac_selected_'+pk,
+                'class': 'selected'
+            });
+
+            var dataSelected = $('<span></span>', {
+                'class': 'selected',
+                'text': title
+            });
+
+            dataLi.append(dataSelected);
+            dataSelected.append(deleteButton);
+
+            $('.autocompleteSelectMultiple').find('ul li:last').before(dataLi);
+
+        }
+
         // hide the select box from showing
-        $('.autocompleteSelectMultiple').siblings('select.autocompleteselectmultiple').hide();
+        $('.autocompleteSelectMultiple').prev('select.autocompleteselectmultiple').hide();
 
         // setup click so anywhere in the box is clicked, it will focus the text input
         $('.autocompleteSelectMultiple').click(function () {
             $(this).find('input.search_input').focus();
+        });
+
+        // if there is currently data, show them...
+        $('.autocompleteSelectMultiple').prev('select.autocompleteselectmultiple').find('option').each(function() {
+            addDataElement($(this).val(), $(this).text());
         });
 
         return this.each(function () {

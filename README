@@ -15,7 +15,6 @@ urlpatterns += patterns(
     (r'^autocomplete/', include('autocomplete.urls')),
 )
 
-
 # Use the autocomplete widgets in your forms
 from autocomplete.widgets import AutocompleteSelectMultiple
 
@@ -28,3 +27,9 @@ class Pizza(models.Model):
 class PizzaForm(forms.ModelForm):
     toppings = forms.ModelMultipleChoiceField(Topping, widget=AutocompleteSelectMultiple(Topping, search_fields=['name']), )
 
+
+To get it working in the templates, you need to include the media, for example:
+
+{% block extra_head %}
+    {{ form.media }}
+{% endblock %}
