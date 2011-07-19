@@ -1,0 +1,85 @@
+
+/* autocomplete */
+
+.autocompleteTag,
+.autocompleteTag ul,
+.autocompleteTag ul li,
+.autocompleteTag ul li span.tag,
+.autocompleteTag ul li input.keyword {
+    float: left;
+}
+
+.autocompleteTag,
+.autocompleteTag ul {
+    overflow: hidden;
+}
+
+.autocompleteTag {
+    border: 1px solid #bbb;
+    background: #fff;
+    margin: 0;
+    padding: 3px 3px 0 3px; /* leaving bottom space to the margin of the input and selected */
+}
+
+.autocompleteTag ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    height: 100%;
+    width: 100%;
+}
+
+.autocompleteTag ul li {
+    margin: 0 3px 0 0;
+    padding: 0 0 3px;
+}
+
+.autocompleteTag ul li span.tag {
+    background: #dee7f8;
+    border: 1px solid #cad8f3;
+    border-radius: 5px;
+    padding: 2px 1px 3px 2px;
+    font-size: 10px;
+    height: 12px;
+    color: #000;
+    line-height: 10px;
+}
+
+.autocompleteTag ul li span.tag a.delete {
+    display: inline-block;
+    background: transparent url(../images/autocomplete_close.png) no-repeat 0 0;
+    width: 7px;
+    height: 7px;
+    margin: 2px 2px 1px 5px;
+    padding: 0;
+    text-indent: -9999em;
+    overflow: hidden;
+}
+
+.autocompleteTag ul li.delete span.tag {
+    background-color: #c8d9f8;
+    border-color: #abc3f3;
+}
+
+.autocompleteTag ul li input.ui-autocomplete-input {
+    border: 0 none;
+    margin: 0 0 3px;
+    background: #fff;
+    padding: 3px 0;
+    font-size: 10px;
+    height: 12px;
+    color: #000;
+    width: 70px;
+    outline: none !important; /* stops chrome outline */
+}
+
+/* ie6 fixes */
+/* http://css-tricks.com/how-to-create-an-ie-only-stylesheet/ */
+.autocompleteTag,
+.autocompleteTag ul li {
+    display/**/: inline;
+}
+
+select.autocompleteTag {
+    display: none;
+}
