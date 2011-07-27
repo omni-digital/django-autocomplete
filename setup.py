@@ -1,9 +1,10 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
+
 setup(
-    name = "autocomplete",
-    packages = ["autocomplete", ],
+    name = "django-autocomplete",
+    packages = find_packages(),
     include_package_data=True,
-    version = "0.1",
+    version = "1.1",
     description = "Django autocomplete widgets and views.",
     author = "Incuna Ltd",
     author_email = "admin@incuna.com",
