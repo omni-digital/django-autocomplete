@@ -5,7 +5,7 @@ setup(
     name = "django-autocomplete",
     packages = find_packages(),
     include_package_data=True,
-    version = "1.1",
+    version = get_version(),
     description = "Django autocomplete widgets and views.",
     author = "Incuna Ltd",
     author_email = "admin@incuna.com",
