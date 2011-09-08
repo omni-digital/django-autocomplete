@@ -191,10 +191,11 @@ x
                     if (options.search_fields) {
                         ajax_url += "&sf="+options.search_fields;
                     }
-                    
-                    $.getJSON(ajax_url, {
-                        term: extractLast( request.term )
-                    }, response );
+                    if (request.term) { 
+                        $.getJSON(ajax_url, {
+                            term: extractLast( request.term )
+                        }, response );
+                    }
                 }, 
                 'focus': function() {
                     // prevent value inserted on focus

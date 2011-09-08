@@ -82,9 +82,11 @@ This is to be used with the Incuna AutocompleteSelectMultiple Django widget.
                         ajax_url += "&sf="+options.search_fields;
                     }
 
-                    $.getJSON(ajax_url, {
-                        term: extractLast( request.term )
-                    }, response );
+                    if (request.term) { 
+                        $.getJSON(ajax_url, {
+                            term: extractLast( request.term )
+                        }, response );
+                    }
 
                 },
                 'search': function() {
