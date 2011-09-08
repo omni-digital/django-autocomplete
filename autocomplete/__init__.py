@@ -25,3 +25,6 @@ def add_searchable_fields(model, new_fields):
 
     set_searchable_fields(model, fields)
 
+__version__ = (1, 1, 1)
+def get_version():
+    return '.'.join(map(str, __version__))

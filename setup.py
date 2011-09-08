@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 
+from autocomplete import get_version
 setup(
     name = "django-autocomplete",
     packages = find_packages(),
