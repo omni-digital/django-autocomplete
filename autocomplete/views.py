@@ -1,21 +1,23 @@
+import json
 import operator
+
 from django.db import models
 from django.http import HttpResponse, HttpResponseNotFound
 from django.db.models.query import QuerySet
 from django.utils.encoding import smart_str
 from django.contrib.contenttypes.models import ContentType
-from django.utils import simplejson
 from django.core.exceptions import ImproperlyConfigured
 
 
 from autocomplete import get_searchable_fields
 
 """
-# Set the models autocomplete will search. 
+# Set the models autocomplete will search.
 AUTOCOMPLETE_MODELS = {
    'profiles.Profile': ['email', 'first_name', 'last_name',],
 }
 """
+
 
 def get_field_lookup_pair(field_name):
     # use different lookup methods depending on the notation
@@ -28,18 +30,20 @@ def get_field_lookup_pair(field_name):
     else:
         return field_name, 'icontains'
 
+
 def construct_search(field_name):
     # use different lookup methods depending on the notation
-    return  "%s__%s" % get_field_lookup_pair(field_name)
+    return "%s__%s" % get_field_lookup_pair(field_name)
 
 
 def search(request):
     """
-    Searches in the fields of the given model and returns the 
-    result as a simple json list of objects to be used by the jQuery autocomplete plugin.
+    Searches in the fields of the given model and returns the
+    result as a simple json list of objects to be used by the jQuery
+    autocomplete plugin.
 
     Usage:
-        In settings set: 
+        In settings set:
         AUTOCOMPLETE_MODELS = {
             'profiles.Profile': ['email', 'first_name', 'last_name',],
         }
@@ -49,7 +53,7 @@ def search(request):
             >>>
 
         [
-            {"value": 2, "label": "Jim Morris"}, 
+            {"value": 2, "label": "Jim Morris"},
             {"value": 1, "label": "Ad Min"}
         ]
     """
@@ -95,9 +99,6 @@ def search(request):
 
         data = [{'label': o.__unicode__(), 'value': o.pk} for o in qs]
 
-        return HttpResponse(simplejson.dumps(data), mimetype='application/javascript')
+        return HttpResponse(json.dumps(data), mimetype='application/javascript')
 
     return HttpResponseNotFound()
-
-
-
