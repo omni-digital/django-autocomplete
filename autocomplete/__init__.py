@@ -27,6 +27,6 @@ if 'DJANGO_SETTINGS_MODULE' in os.environ:
 
         set_searchable_fields(model, fields)
 
-__version__ = (1, 1, 2)
+__version__ = (1, 1, 3)
 def get_version():
     return '.'.join(map(str, __version__))
