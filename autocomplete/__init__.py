@@ -8,15 +8,16 @@ if 'DJANGO_SETTINGS_MODULE' in os.environ:
 
     def get_searchable_fields(model):
         try :
-            return AUTOCOMPLETE_MODELS['%s.%s' % (model._meta.app_label, model._meta.module_name)]
+            return AUTOCOMPLETE_MODELS['%s.%s' % (model._meta.app_label, model._meta.model_name)]
         except KeyError:
             try :
-                return AUTOCOMPLETE_MODELS['%s.%s' % (model._meta.app_label, capfirst(model._meta.module_name))]
+                return AUTOCOMPLETE_MODELS['%s.%s' % (model._meta.app_label, capfirst(model._meta.model_name))]
             except KeyError:
                 return []
 
     def set_searchable_fields(model, fields):
-        AUTOCOMPLETE_MODELS['%s.%s' % (model._meta.app_label, model._meta.module_name)] = fields
+        model_label = '%s.%s' % (model._meta.app_label, model._meta.model_name)
+        AUTOCOMPLETE_MODELS[model_label] = fields
 
     def add_searchable_fields(model, new_fields):
         fields = get_searchable_fields(model)
