@@ -93,12 +93,12 @@ def search(request):
             or_queries = [models.Q(**{construct_search(smart_str(field_name)): smart_str(bit)})
                           for field_name in search_fields]
             other_qs = QuerySet(model)
-            other_qs.dup_select_related(qs)
+            other_qs.query.select_related = qs.query.select_related
             other_qs = other_qs.filter(reduce(operator.or_, or_queries))
             qs = qs & other_qs
 
         data = [{'label': o.__unicode__(), 'value': o.pk} for o in qs]
 
-        return HttpResponse(json.dumps(data), mimetype='application/javascript')
+        return HttpResponse(json.dumps(data), content_type='application/javascript')
 
     return HttpResponseNotFound()
