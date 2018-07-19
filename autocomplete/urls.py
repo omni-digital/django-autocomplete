@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
+from autocomplete.views import search
 
-urlpatterns = patterns(
-    'autocomplete.views',
-    url(r'^$', 'search', name='autocomplete_search'),
-)
+urlpatterns = [
+    url(r'^$', search, name='autocomplete_search'),
+]
