@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import get_model
+from django.apps import apps
 from django.utils.safestring import mark_safe
 from django import forms
 
@@ -84,7 +84,7 @@ class AutocompleteTag(forms.TextInput):
 
         if model is None:
             if hasattr(settings, 'AUTOCOMPLETE_TAG_MODEL'):
-                model = get_model(*settings.AUTOCOMPLETE_TAG_MODEL.split('.', 2))
+                model = apps.get_model(*settings.AUTOCOMPLETE_TAG_MODEL.split('.', 2))
             else:
                 raise ImproperlyConfigured("AUTOCOMPLETE_TAG_MODEL setting not set. Set it to the name of the tag model to autocomplete.")
 
