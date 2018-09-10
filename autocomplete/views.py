@@ -83,7 +83,7 @@ def search(request):
     else:
         # Limit to search fields
         search_fields = search_fields.split(',')
-        search_fields = filter(lambda f: get_field_lookup_pair(f)[0] in map(lambda f: get_field_lookup_pair(f)[0], allowed_fields), search_fields)
+        search_fields = [f for f in search_fields if get_field_lookup_pair(f)[0] in [get_field_lookup_pair(f)[0] for f in allowed_fields]]
 
     query = request.GET.get('term', None)
 
