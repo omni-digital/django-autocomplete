@@ -14,8 +14,7 @@ get_model = apps.get_model
 
 class AutocompleteSelectMultiple(forms.SelectMultiple):
     """
-    To use this widget, you need jQuery, jQuery UI and jQuery UI theme stylesheet
-    Add
+    To use this widget, you need jQuery, jQuery UI and jQuery UI theme stylesheet Add.
     """
     class Media:
         css = {
@@ -48,7 +47,7 @@ class AutocompleteSelectMultiple(forms.SelectMultiple):
 
         rendered = super(AutocompleteSelectMultiple, self).render(name,value, attrs)
 
-        return rendered + mark_safe(u'''
+        return rendered + mark_safe('''
             <script>
                 $(document).ready(function() {
                     $('.autocompleteSelectMultiple').autocompleteSelectMultiple({
@@ -68,6 +67,7 @@ class AutocompleteSelectMultiple(forms.SelectMultiple):
             'search_fields' :  self.search_fields and ','.join(self.search_fields) or "",
             'content_type' : ContentType.objects.get_for_model(self.model).pk,
         })
+
 
 class AutocompleteTag(forms.TextInput):
     """
@@ -90,7 +90,9 @@ class AutocompleteTag(forms.TextInput):
             if hasattr(settings, 'AUTOCOMPLETE_TAG_MODEL'):
                 model = get_model(*settings.AUTOCOMPLETE_TAG_MODEL.split('.', 2))
             else:
-                raise ImproperlyConfigured("AUTOCOMPLETE_TAG_MODEL setting not set. Set it to the name of the tag model to autocomplete.")
+                raise ImproperlyConfigured(
+                    'AUTOCOMPLETE_TAG_MODEL setting not set. Set it to the name of the tag model to autocomplete.'
+                )
 
         self.model = model
         self.search_fields = search_fields
@@ -105,12 +107,12 @@ class AutocompleteTag(forms.TextInput):
 
     def render(self, name, value, attrs=None):
 
-        if value is not None and not isinstance(value, basestring):
+        if value is not None and not isinstance(value, str):
             value = ", ".join([str(getattr(o, 'tag', o)) for o in value])
 
         rendered = super(AutocompleteTag, self).render(name, value, attrs)
 
-        return rendered + mark_safe(u'''
+        return rendered + mark_safe('''
             <script>
                 $(document).ready(function() {
                     $('#%(id)s').autocompleteTag({
