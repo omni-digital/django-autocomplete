@@ -2,11 +2,15 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import get_model
+from django.apps import apps
 from django.utils.safestring import mark_safe
 from django import forms
 
 from autocomplete import add_searchable_fields, AUTOCOMPLETE_URL_NAME
+
+
+get_model = apps.get_model
+
 
 class AutocompleteSelectMultiple(forms.SelectMultiple):
     """
@@ -40,7 +44,7 @@ class AutocompleteSelectMultiple(forms.SelectMultiple):
         super(AutocompleteSelectMultiple, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
-        self.choices = value and [(o.pk, unicode(o)) for o in self.model.objects.filter(pk__in=value)] or []
+        self.choices = value and [(o.pk, str(o)) for o in self.model.objects.filter(pk__in=value)] or []
 
         rendered = super(AutocompleteSelectMultiple, self).render(name,value, attrs)
 

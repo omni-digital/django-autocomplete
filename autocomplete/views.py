@@ -98,7 +98,7 @@ def search(request):
             other_qs = other_qs.filter(functools.reduce(operator.or_, or_queries))
             qs = qs & other_qs
 
-        data = [{'label': o.__unicode__(), 'value': o.pk} for o in qs]
+        data = [{'label': o.__str__(), 'value': o.pk} for o in qs]
 
         return HttpResponse(json.dumps(data), content_type='application/javascript')
 
