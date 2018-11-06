@@ -1,3 +1,4 @@
+import functools
 import json
 import operator
 
@@ -94,7 +95,7 @@ def search(request):
                           for field_name in search_fields]
             other_qs = QuerySet(model)
             other_qs.query.select_related = qs.query.select_related
-            other_qs = other_qs.filter(reduce(operator.or_, or_queries))
+            other_qs = other_qs.filter(functools.reduce(operator.or_, or_queries))
             qs = qs & other_qs
 
         data = [{'label': o.__unicode__(), 'value': o.pk} for o in qs]
