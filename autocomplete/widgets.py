@@ -9,6 +9,9 @@ from django import forms
 from autocomplete import add_searchable_fields, AUTOCOMPLETE_URL_NAME
 
 
+get_model = apps.get_model
+
+
 class AutocompleteSelectMultiple(forms.SelectMultiple):
     """
     To use this widget, you need jQuery, jQuery UI and jQuery UI theme stylesheet Add.
@@ -40,7 +43,7 @@ class AutocompleteSelectMultiple(forms.SelectMultiple):
         super(AutocompleteSelectMultiple, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
-        self.choices = value and [(o.pk, unicode(o)) for o in self.model.objects.filter(pk__in=value)] or []
+        self.choices = value and [(o.pk, str(o)) for o in self.model.objects.filter(pk__in=value)] or []
 
         rendered = super(AutocompleteSelectMultiple, self).render(name,value, attrs)
 
@@ -85,7 +88,7 @@ class AutocompleteTag(forms.TextInput):
 
         if model is None:
             if hasattr(settings, 'AUTOCOMPLETE_TAG_MODEL'):
-                model = apps.get_model(*settings.AUTOCOMPLETE_TAG_MODEL.split('.', 2))
+                model = get_model(*settings.AUTOCOMPLETE_TAG_MODEL.split('.', 2))
             else:
                 raise ImproperlyConfigured(
                     'AUTOCOMPLETE_TAG_MODEL setting not set. Set it to the name of the tag model to autocomplete.'
